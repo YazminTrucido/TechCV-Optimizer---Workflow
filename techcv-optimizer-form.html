@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TechCV Optimizer</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%23A8342B'/%3E%3Cpath d='M6 18 L18 6 M18 6 L12 6 M18 6 L18 12' stroke='white' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #FAF8F3;
+    --paper-line: #E4DFD3;
+    --card: #ffffff;
+    --ink: #1C2027;
+    --ink-soft: #5B5F67;
+    --ink-faint: #8B8779;
+    --mark: #A8342B;
+    --mark-soft: #F3E7E4;
+    --ok: #2F5D50;
+    --ok-soft: #E7EFEC;
+    --note: #F6EFD9;
+    --note-line: #E4D6A8;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+
+  body{
+    margin:0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', sans-serif;
+    line-height: 1.5;
+  }
+
+  .page{
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  /* Header / brand mark */
+  .mark{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    color: var(--mark);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    margin-bottom: 28px;
+  }
+  .mark svg{ width:16px; height:16px; flex-shrink:0; }
+
+  h1{
+    font-family:'Fraunces', serif;
+    font-weight: 600;
+    font-size: clamp(2rem, 5vw, 2.7rem);
+    line-height: 1.14;
+    letter-spacing: -0.01em;
+    margin: 0 0 16px;
+    max-width: 16ch;
+  }
+  h1 em{
+    font-style: italic;
+    font-weight: 400;
+    color: var(--mark);
+  }
+
+  .lede{
+    font-size: 1.03rem;
+    color: var(--ink-soft);
+    max-width: 54ch;
+    margin: 0 0 40px;
+  }
+
+  /* Progress */
+  .progress{
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    margin-bottom: 36px;
+  }
+  .progress-step{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+  }
+  .progress-dot{
+    width: 22px; height:22px;
+    border-radius:50%;
+    border: 1.5px solid var(--paper-line);
+    display:flex; align-items:center; justify-content:center;
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+    background: var(--paper);
+    transition: all 0.2s ease;
+  }
+  .progress-step.active .progress-dot{
+    border-color: var(--mark);
+    color: var(--mark);
+    background: var(--mark-soft);
+  }
+  .progress-step.done .progress-dot{
+    border-color: var(--ok);
+    background: var(--ok);
+    color: #fff;
+  }
+  .progress-step.active{ color: var(--ink); }
+  .progress-line{
+    flex:1;
+    height:1px;
+    background: var(--paper-line);
+  }
+
+  /* Card */
+  .card{
+    background: var(--card);
+    border: 1px solid var(--paper-line);
+    border-radius: 6px;
+    padding: 8px 28px;
+  }
+
+  .step-panel{ display:none; }
+  .step-panel.active{ display:block; animation: fadeIn 0.25s ease; }
+  @keyframes fadeIn{ from{ opacity:0; transform: translateY(4px);} to{opacity:1; transform:none;} }
+
+  .field{
+    padding: 24px 0;
+    border-bottom: 1px solid var(--paper-line);
+  }
+  .field:last-child{ border-bottom:none; }
+
+  .field label{
+    display:block;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .field .hint{
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    margin: 0 0 12px;
+  }
+  .optional-tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--ink-faint);
+    font-weight: 400;
+    margin-left: 6px;
+  }
+
+  input[type="text"], input[type="email"], textarea{
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: 1rem;
+    color: var(--ink);
+    padding: 8px 0;
+    outline: none;
+    resize: vertical;
+  }
+  input::placeholder, textarea::placeholder{ color: #A6A29A; }
+
+  input[type="text"], input[type="email"]{
+    border-bottom: 1px solid var(--paper-line);
+    padding-bottom: 10px;
+    transition: border-color 0.15s ease;
+  }
+  input[type="text"]:focus, input[type="email"]:focus{ border-color: var(--mark); }
+  input:invalid:not(:placeholder-shown){ border-color: var(--mark); }
+
+  textarea{
+    min-height: 200px;
+    border: 1px solid var(--paper-line);
+    border-radius: 3px;
+    padding: 14px;
+    background: var(--paper);
+    transition: border-color 0.15s ease;
+  }
+  textarea:focus{ border-color: var(--mark); background:#fff; }
+
+  .counter{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+    text-align: right;
+    margin-top: 6px;
+  }
+  .counter.warn{ color: var(--mark); }
+  .counter.ok{ color: var(--ok); }
+
+  /* Tip callout */
+  .tip{
+    display:flex;
+    gap: 12px;
+    background: var(--note);
+    border: 1px solid var(--note-line);
+    border-radius: 4px;
+    padding: 14px 16px;
+    font-size: 0.87rem;
+    color: #5C4E1F;
+    margin: 20px 0 0;
+  }
+  .tip svg{ width:16px; height:16px; flex-shrink:0; margin-top:2px; color:#8A6D1D; }
+
+  /* Nav buttons */
+  .step-nav{
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    padding: 28px 0 8px;
+  }
+
+  button{
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 600;
+    font-size: 0.98rem;
+    border: none;
+    border-radius: 4px;
+    padding: 13px 24px;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease, opacity 0.15s ease;
+  }
+  .btn-primary{ color: #fff; background: var(--ink); }
+  .btn-primary:hover{ background: var(--mark); }
+  .btn-primary:active{ transform: translateY(1px); }
+  .btn-primary:disabled{ background:#C9C4B7; cursor:not-allowed; }
+
+  .btn-ghost{
+    color: var(--ink-soft);
+    background: transparent;
+    padding: 13px 10px;
+  }
+  .btn-ghost:hover{ color: var(--ink); }
+
+  .status{
+    font-size: 0.86rem;
+    color: var(--mark);
+    margin-top: 10px;
+    min-height: 1.2em;
+  }
+
+  /* Outside-card summary strip before submit */
+  .review{
+    margin-top: 18px;
+    padding: 16px 18px;
+    background: var(--paper);
+    border: 1px dashed var(--paper-line);
+    border-radius: 4px;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+  }
+  .review b{ color: var(--ink); }
+
+  /* Success state */
+  .success{
+    display:none;
+    text-align:center;
+    padding: 48px 20px 20px;
+  }
+  .success.show{ display:block; }
+  .success-icon{
+    width:52px; height:52px;
+    border-radius:50%;
+    background: var(--ok-soft);
+    display:flex; align-items:center; justify-content:center;
+    margin: 0 auto 22px;
+  }
+  .success-icon svg{ width:24px; height:24px; color: var(--ok); }
+  .success h2{
+    font-family:'Fraunces', serif;
+    font-size: 1.5rem;
+    margin: 0 0 12px;
+  }
+  .success p{
+    color: var(--ink-soft);
+    max-width: 40ch;
+    margin: 0 auto 6px;
+    font-size: 0.95rem;
+  }
+  .success .eta{
+    display:inline-block;
+    margin-top: 18px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--mark);
+    background: var(--mark-soft);
+    padding: 6px 14px;
+    border-radius: 20px;
+  }
+
+  form-wrap{ display:block; }
+  .hidden{ display:none !important; }
+
+  @media (max-width: 480px){
+    .card{ padding: 4px 18px; }
+    .progress-step span.label{ display:none; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition:none !important; animation:none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="mark">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M4 20 L20 4 M20 4 L14 4 M20 4 L20 10" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    TechCV Optimizer
+  </div>
+
+  <div id="introBlock">
+    <h1>Tu experiencia ya está ahí.<br><em>Falta que se note.</em></h1>
+    <p class="lede">Contanos quién sos y pegá tu CV actual. En un par de minutos te devolvemos una versión reescrita con impacto medible, ordenada para sistemas ATS, directo a tu email.</p>
+  </div>
+
+  <div class="progress" id="progressBar">
+    <div class="progress-step active" data-step="1">
+      <div class="progress-dot">1</div><span class="label">Datos</span>
+    </div>
+    <div class="progress-line"></div>
+    <div class="progress-step" data-step="2">
+      <div class="progress-dot">2</div><span class="label">Tu CV</span>
+    </div>
+    <div class="progress-line"></div>
+    <div class="progress-step" data-step="3">
+      <div class="progress-dot">3</div><span class="label">Confirmar</span>
+    </div>
+  </div>
+
+  <div class="card" id="formCard">
+    <form id="cvForm" novalidate>
+
+      <!-- STEP 1 -->
+      <div class="step-panel active" data-panel="1">
+        <div class="field">
+          <label for="email">Tu email</label>
+          <p class="hint">Ahí te enviamos el CV optimizado.</p>
+          <input type="email" id="email" name="email" placeholder="nombre@correo.com" required>
+        </div>
+
+        <div class="field">
+          <label for="rol">Rol al que aspirás</label>
+          <p class="hint">El puesto o título que estás buscando.</p>
+          <input type="text" id="rol" name="rol" placeholder="Ej: Salesforce System Architect / Data Analyst" required>
+        </div>
+
+        <div class="field">
+          <label for="herramientas">Herramientas y skills técnicas <span class="optional-tag">opcional</span></label>
+          <p class="hint">Separadas por coma. Si ya están en tu CV, podés dejarlo en blanco.</p>
+          <input type="text" id="herramientas" name="herramientas" placeholder="Ej: PostgreSQL, Power BI, SQL, Salesforce">
+        </div>
+
+        <div class="step-nav">
+          <span></span>
+          <button type="button" class="btn-primary" id="toStep2">Continuar</button>
+        </div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div class="step-panel" data-panel="2">
+        <div class="field">
+          <label for="cv">Tu CV actual</label>
+          <p class="hint">Pegá el texto completo, tal cual lo tenés. No hace falta que esté prolijo ni en un solo idioma.</p>
+          <textarea id="cv" name="cv" placeholder="Pegá acá el contenido de tu CV..." required></textarea>
+          <div class="counter" id="charCounter">0 caracteres · mínimo 40</div>
+          <div class="tip">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 0-4 12.7V17a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-2.3A7 7 0 0 0 12 2Z"/><path d="M9 21h6"/></svg>
+            <span>Cuanto más contexto incluyas (logros, herramientas, incluso frases sueltas), mejor puede identificar impacto real la IA.</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="descripcionPuesto">Descripción del puesto <span class="optional-tag">opcional</span></label>
+          <p class="hint">Si pegás la oferta a la que querés aplicar, ajustamos el vocabulario del CV a esa vacante específica.</p>
+          <textarea id="descripcionPuesto" name="descripcionPuesto" placeholder="Pegá acá la descripción del puesto, si la tenés..." style="min-height:110px;"></textarea>
+        </div>
+
+        <div class="step-nav">
+          <button type="button" class="btn-ghost" id="toStep1Back">← Volver</button>
+          <button type="button" class="btn-primary" id="toStep3">Revisar</button>
+        </div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div class="step-panel" data-panel="3">
+        <p class="hint" style="margin-top:20px;">Revisá que esté todo bien antes de enviar.</p>
+        <div class="review" id="reviewBox"></div>
+
+        <div class="step-nav">
+          <button type="button" class="btn-ghost" id="toStep2Back">← Volver</button>
+          <button type="submit" class="btn-primary" id="submitBtn">Optimizar mi CV</button>
+        </div>
+        <div class="status" id="statusMsg"></div>
+      </div>
+
+    </form>
+
+    <div class="success" id="successBox">
+      <div class="success-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+      </div>
+      <h2>Listo, ya lo estamos procesando</h2>
+      <p>Te llega el CV optimizado a tu email, junto con el enlace al documento editable.</p>
+      <span class="eta">⏱ normalmente tarda 1–2 minutos</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Reemplazá esta URL por la del webhook de Make/Zapier que recibe el trigger del formulario
+  const WEBHOOK_URL = "https://us2.make.com/public/shared-scenario/yItxP4Oi1PD/tech-cv-optimizer";
+
+  const form = document.getElementById('cvForm');
+  const cvField = document.getElementById('cv');
+  const charCounter = document.getElementById('charCounter');
+  const statusMsg = document.getElementById('statusMsg');
+  const submitBtn = document.getElementById('submitBtn');
+  const successBox = document.getElementById('successBox');
+  const formCard = document.getElementById('formCard');
+  const introBlock = document.getElementById('introBlock');
+  const progressBar = document.getElementById('progressBar');
+  const reviewBox = document.getElementById('reviewBox');
+
+  const panels = document.querySelectorAll('.step-panel');
+  const steps = document.querySelectorAll('.progress-step');
+
+  function goToStep(n){
+    panels.forEach(p => p.classList.toggle('active', p.dataset.panel === String(n)));
+    steps.forEach(s => {
+      const stepNum = Number(s.dataset.step);
+      s.classList.toggle('active', stepNum === n);
+      s.classList.toggle('done', stepNum < n);
+    });
+    if(n === 3) buildReview();
+    window.scrollTo({top: formCard.offsetTop - 20, behavior:'smooth'});
+  }
+
+  function buildReview(){
+    const email = document.getElementById('email').value.trim();
+    const rol = document.getElementById('rol').value.trim();
+    const cvLen = cvField.value.trim().length;
+    reviewBox.innerHTML =
+      `<b>Email:</b> ${email || '—'}<br>` +
+      `<b>Rol objetivo:</b> ${rol || '—'}<br>` +
+      `<b>CV pegado:</b> ${cvLen} caracteres`;
+  }
+
+  document.getElementById('toStep2').addEventListener('click', () => {
+    const email = document.getElementById('email');
+    const rol = document.getElementById('rol');
+    if(!email.checkValidity() || !rol.checkValidity()){
+      email.reportValidity();
+      rol.reportValidity();
+      return;
+    }
+    goToStep(2);
+  });
+
+  document.getElementById('toStep1Back').addEventListener('click', () => goToStep(1));
+  document.getElementById('toStep2Back').addEventListener('click', () => goToStep(2));
+
+  document.getElementById('toStep3').addEventListener('click', () => {
+    if(cvField.value.trim().length < 40){
+      cvField.focus();
+      charCounter.classList.add('warn');
+      return;
+    }
+    goToStep(3);
+  });
+
+  cvField.addEventListener('input', () => {
+    const len = cvField.value.length;
+    charCounter.textContent = `${len} caracteres · mínimo 40`;
+    charCounter.classList.remove('warn','ok');
+    if(len > 0 && len < 40) charCounter.classList.add('warn');
+    if(len >= 40) charCounter.classList.add('ok');
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const payload = {
+      email: document.getElementById('email').value.trim(),
+      rol: document.getElementById('rol').value.trim(),
+      herramientas: document.getElementById('herramientas').value.trim(),
+      cv_original: cvField.value.trim(),
+      descripcion_puesto: document.getElementById('descripcionPuesto').value.trim()
+    };
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Enviando...';
+    statusMsg.textContent = '';
+
+    try {
+      const res = await fetch(WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) throw new Error('Respuesta no válida del servidor');
+
+      introBlock.classList.add('hidden');
+      progressBar.classList.add('hidden');
+      form.classList.add('hidden');
+      successBox.classList.add('show');
+    } catch (err) {
+      statusMsg.textContent = 'Algo salió mal. Probá de nuevo en un momento.';
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Optimizar mi CV';
+    }
+  });
+</script>
+
+</body>
+</html>
