@@ -4,7 +4,7 @@
 
 Un mini SaaS que recibe la experiencia en bruto de un usuario y devuelve un CV reestructurado con impacto medible, optimizado para sistemas ATS (Applicant Tracking Systems), usando IA generativa como motor de reescritura.
 
-🔗 **Escenario en vivo (Make):** [Ver integración de webhooks](https://us2.make.com/public/shared-scenario/yItxP4Oi1PD/integration-webhooks)
+🔗 **Escenario en vivo (Make):** [Ver TechCV Optimizer](https://us2.make.com/public/shared-scenario/yItxP4Oi1PD/tech-cv-optimizer)
 
 ---
 
