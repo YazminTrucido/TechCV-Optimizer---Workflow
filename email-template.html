@@ -1,0 +1,101 @@
+<!-- 
+  Plantilla para el módulo Gmail "Send an Email" en Make.
+  Pegar esto en el campo "Content", con "Content Type" = HTML (o Rich Text si Gmail lo llama así).
+  Reemplazar {{rol}} y {{doc_link}} por las burbujas reales:
+    - {{rol}}      -> variable del webhook original (rol objetivo)
+    - {{doc_link}} -> URL del documento, generada por el módulo de Google Docs
+-->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#FAF8F3; padding:32px 0; font-family:'IBM Plex Sans', Arial, sans-serif;">
+  <tr>
+    <td align="center">
+      <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="background-color:#ffffff; border:1px solid #E4DFD3; border-radius:6px; overflow:hidden;">
+
+        <!-- Header -->
+        <tr>
+          <td style="padding:32px 36px 0 36px;">
+            <table role="presentation" cellpadding="0" cellspacing="0">
+              <tr>
+                <td style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:13px; color:#A8342B; letter-spacing:0.02em;">
+                  ✎ TechCV Optimizer
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- Title -->
+        <tr>
+          <td style="padding:20px 36px 0 36px;">
+            <h1 style="margin:0; font-family:Georgia, 'Times New Roman', serif; font-weight:600; font-size:26px; line-height:1.25; color:#1C2027;">
+              Tu CV ya está listo
+            </h1>
+            <p style="margin:14px 0 0 0; font-size:15px; line-height:1.6; color:#5B5F67;">
+              Reestructuramos tu experiencia para el rol de <strong style="color:#1C2027;">{{rol}}</strong>, con foco en impacto medible y formato compatible con sistemas ATS.
+            </p>
+          </td>
+        </tr>
+
+        <!-- CTA -->
+        <tr>
+          <td style="padding:28px 36px 8px 36px;">
+            <table role="presentation" cellpadding="0" cellspacing="0">
+              <tr>
+                <td style="border-radius:4px; background-color:#1C2027;">
+                  <a href="{{doc_link}}" target="_blank" style="display:inline-block; padding:13px 26px; font-size:15px; font-weight:600; color:#ffffff; text-decoration:none; border-radius:4px;">
+                    Abrir mi CV optimizado
+                  </a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- What's inside -->
+        <tr>
+          <td style="padding:28px 36px 0 36px;">
+            <p style="margin:0 0 10px 0; font-size:13px; font-weight:600; color:#1C2027; text-transform:none;">
+              Qué vas a encontrar en el documento
+            </p>
+            <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+              <tr>
+                <td style="padding:6px 0; font-size:14px; color:#5B5F67;">— Resumen profesional reescrito con foco en tu rol objetivo</td>
+              </tr>
+              <tr>
+                <td style="padding:6px 0; font-size:14px; color:#5B5F67;">— Experiencia con logros de impacto, no solo tareas</td>
+              </tr>
+              <tr>
+                <td style="padding:6px 0; font-size:14px; color:#5B5F67;">— Habilidades técnicas organizadas para lectura ATS</td>
+              </tr>
+              <tr>
+                <td style="padding:6px 0; font-size:14px; color:#5B5F67;">— 2 recomendaciones puntuales para reforzar tu perfil</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- Note box -->
+        <tr>
+          <td style="padding:26px 36px 0 36px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background-color:#F6EFD9; border:1px solid #E4D6A8; border-radius:4px;">
+              <tr>
+                <td style="padding:14px 16px; font-size:13px; line-height:1.6; color:#5C4E1F;">
+                  El documento es completamente editable en Google Docs: revisá los datos entre corchetes (como fechas o nombres de empresa) antes de enviarlo a un proceso de selección.
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- Footer -->
+        <tr>
+          <td style="padding:30px 36px 32px 36px; border-top:1px solid #E4DFD3; margin-top:20px;">
+            <p style="margin:20px 0 0 0; font-size:12px; color:#8B8779;">
+              TechCV Optimizer · Este email se generó automáticamente a partir del CV que enviaste.
+            </p>
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
