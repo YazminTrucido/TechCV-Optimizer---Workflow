@@ -73,7 +73,7 @@ flowchart LR
 
 ## Cómo probarlo
 
-1. Abrí `techcv-optimizer-form.html` en el navegador (o publicalo con GitHub Pages).
+1. Abrí [`techcv-optimizer-form.html`](https://yazmintrucido.github.io/TechCV-Optimizer---Workflow/) en el navegador (publicado con GitHub Pages).
 2. Completá el formulario con un email real, tu rol objetivo y pegá un CV de prueba.
 3. El escenario de Make (enlazado arriba) procesa la solicitud y te devuelve un email con el CV optimizado en 1–2 minutos.
 
@@ -100,4 +100,4 @@ El escenario incluye manejadores de error (*error handlers*) en los módulos cr�
 
 ## Autor
 
-Proyecto desarrollado como entrega final para la materia **Introducción a la Inteligencia Artificial**.
+Proyecto desarrollado por Yazmin Trucido asistido con Cloude AI como entrega final para la materia **Introducción a la Inteligencia Artificial**.
